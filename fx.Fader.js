@@ -50,8 +50,8 @@ enyo.kind({
 	},
 	
 	components: [
-		{name: "fader", kind: "Image", cover: 0, ontap: "hide"},
-		{name: "fadee", kind: "Image", cover: 1, ontap: "hide"}
+		{name: "fader", kind: "Image", cover: 0},
+		{name: "fadee", kind: "Image", cover: 1}
 	],
 	
 	create: function(){
@@ -121,7 +121,7 @@ enyo.kind({
 		fe.applyStyle("opacity", 1 - opacity);
 		
 		
-		this.log("increasing...", opacity);
+		//this.log("increasing...", opacity);
 	},
 	decrease: function(fe, fr){ // swapped the arguments. GENIUS.
 		var opacity = 0;
@@ -137,7 +137,7 @@ enyo.kind({
 		fe.applyStyle("opacity", opacity);
 		fr.applyStyle("opacity", 1 - opacity);
 		
-		this.log("decreasing...", opacity);
+		//this.log("decreasing...", opacity);
 	},
 	imageSetup: function(image){
 		image.applyStyle("width", "1024px");
