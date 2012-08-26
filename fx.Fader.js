@@ -44,7 +44,8 @@ enyo.kind({
 	
 	published: {
 		variable: .05, //how much to increase the opacity
-		timeout: .2, //seconds
+		timeout: .1, //seconds
+		size: 1024, //how big is the image [centered]
 		next: (function(){}),
 		rotateFlag: false
 	},
@@ -138,10 +139,10 @@ enyo.kind({
 		//this.log("decreasing...", opacity);
 	},
 	imageSetup: function(image){
-		image.applyStyle("width", "1024px");
-		image.applyStyle("height", "1024px");
-		image.applyStyle("right", (window.innerWidth - 1024) / 2 + "px");
-		image.applyStyle("bottom", (window.innerHeight - 1024) / 2 + "px");
+		image.applyStyle("width", this.size + "px");
+		image.applyStyle("height", this.size + "px");
+		image.applyStyle("right", (window.innerWidth - this.size) / 2 + "px");
+		image.applyStyle("bottom", (window.innerHeight - this.size) / 2 + "px");
 		image.applyStyle("position", "fixed");
 		image.setSrc(this.rootPath + this.covers[image.cover] + ".png");
 	},
