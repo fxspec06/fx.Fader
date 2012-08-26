@@ -36,16 +36,18 @@ enyo.kind({
 	rootPath: "assets/cover/",
 	
 	//images named .png, they fade in order declared here
+	//* NOTE: You need an odd number of images here. o.O
 	covers: [
 		"cover1",
 		"cover0",
-		"cover2"
+		"cover0",
+		//"cover0"
 	],
 	
 	published: {
-		variable: .05, //how much to increase the opacity
+		variable: .02, //how much to increase the opacity
 		timeout: .1, //seconds
-		size: 1024, //how big is the image [centered]
+		size: 350, //how big is the image [centered]
 		next: (function(){}),
 		rotateFlag: false
 	},
@@ -84,12 +86,12 @@ enyo.kind({
 		switch(this.next){	//seriously, just don't even look here. it works.
 			case this.decrease:
 				this.next = this.increase;
-				fr.applyStyle("opacity", 0);
+				fr.applyStyle("opacity", -this.variable);
 				this.rotateFlag = false;
 				break;
 			case this.increase:
 				this.next = this.decrease;
-				fr.applyStyle("opacity", .1);
+				fr.applyStyle("opacity", this.variable);
 				this.fade();
 				break;
 		}
@@ -109,12 +111,10 @@ enyo.kind({
 		var opacity = 0;
 		opacity = fr.domStyles.opacity + this.variable;
 		
-		opacity = opacity * 1000;
-		opacity = Math.round(opacity);
-		if (opacity >= 1000){
+		opacity = roundNumber(opacity, 4);
+		if (opacity >= 1){
 			this.rotateFlag = true;
 		}
-		opacity = opacity / 1000;
 		
 		fr.applyStyle("opacity", opacity);
 		fe.applyStyle("opacity", 1 - opacity);
@@ -126,12 +126,10 @@ enyo.kind({
 		var opacity = 0;
 		opacity = fe.domStyles.opacity - this.variable;
 		
-		opacity = opacity * 1000;
-		opacity = Math.round(opacity);
+		opacity = roundNumber(opacity, 4);
 		if (opacity <= 0){
 			this.rotateFlag = true;
 		}
-		opacity = opacity / 1000;
 		
 		fe.applyStyle("opacity", opacity);
 		fr.applyStyle("opacity", 1 - opacity);
@@ -157,3 +155,7 @@ enyo.kind({
 		return r;
 	}
 });
+function roundNumber(num, dec) {
+	var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+	return result;
+}
