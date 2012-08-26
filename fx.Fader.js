@@ -43,8 +43,8 @@ enyo.kind({
 	],
 	
 	published: {
-		variable: .1, //how much to increase the opacity
-		timeout: 1, //seconds
+		variable: .05, //how much to increase the opacity
+		timeout: .2, //seconds
 		next: (function(){}),
 		rotateFlag: false
 	},
@@ -103,8 +103,6 @@ enyo.kind({
 		var fe = this.$.fadee;
 		
 		this.next(fr, fe);
-		
-		this.render();
 	},
 	increase: function(fr, fe){
 		var opacity = 0;
@@ -142,11 +140,10 @@ enyo.kind({
 	imageSetup: function(image){
 		image.applyStyle("width", "1024px");
 		image.applyStyle("height", "1024px");
-		image.applyStyle("margin-right", (window.innerWidth - 1024) / 2 + "px");
-		image.applyStyle("margin-bottom", (window.innerHeight - 1024) / 2 + "px");
+		image.applyStyle("right", (window.innerWidth - 1024) / 2 + "px");
+		image.applyStyle("bottom", (window.innerHeight - 1024) / 2 + "px");
 		image.applyStyle("position", "fixed");
 		image.setSrc(this.rootPath + this.covers[image.cover] + ".png");
-		image.render();
 	},
 	show: function(){
 		var r = this.inherited(arguments);
