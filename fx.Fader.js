@@ -36,36 +36,31 @@ enyo.kind({
 	rootPath: "assets/cover/",
 	
 	//images named .png, they fade in order declared here
-	//* NOTE: You need an odd number of images here. o.O
 	covers: [
 		"cover1",
 		"cover0",
-		"cover0",
-		//"cover0"
+		"cover1",
+		"cover2",
+		"cover0"
 	],
 	
 	published: {
 		variable: .02, //how much to increase the opacity
 		timeout: .1, //seconds
 		size: 350, //how big is the image [centered]
-		next: (function(){}),
+		_switch: false,
 		rotateFlag: false
 	},
 	
 	components: [
-		{name: "fader", kind: "Image", cover: 0},
-		{name: "fadee", kind: "Image", cover: 1}
+		{name: "fader", kind: "Image", cover: 0, domStyles: {opacity: .5}},
+		{name: "fadee", kind: "Image", cover: 1, domStyles: {opacity: .5}}
 	],
 	
 	create: function(){
 		this.inherited(arguments);
 		
-		this.$.fader.applyStyle("opacity", .5);
-		this.$.fadee.applyStyle("opacity", .5);
-		
 		this.rotate();
-		
-		this.next = this.increase;
 		
 		this.beginFade();
 	},
@@ -80,21 +75,24 @@ enyo.kind({
 		if(fr.cover >= this.covers.length){
 			fr.cover = 0;
 		}
+		
+		var _switch = fe.cover;
+		fe.cover = fr.cover;
+		fr.cover = _switch;
+		
+		this._switch = (!this._switch);
+		
 		this.imageSetup(fr);
 		this.imageSetup(fe);
 		
-		switch(this.next){	//seriously, just don't even look here. it works.
-			case this.decrease:
-				this.next = this.increase;
-				fr.applyStyle("opacity", -this.variable);
-				this.rotateFlag = false;
-				break;
-			case this.increase:
-				this.next = this.decrease;
-				fr.applyStyle("opacity", this.variable);
-				this.fade();
-				break;
+		if (fr.domStyles.opacity >= 1) {
+			fr.applyStyle("opacity", -this.variable);
 		}
+		if (fe.domStyles.opacity >= 1) {
+			fe.applyStyle("opacity", -this.variable);
+		}
+		
+		this.rotateFlag = false;
 	},
 	beginFade: function(){
 		this.fading = setInterval(this.fade.bind(this), this.timeout * 1000);
@@ -105,11 +103,14 @@ enyo.kind({
 		var fr = this.$.fader;
 		var fe = this.$.fadee;
 		
-		this.next(fr, fe);
+		if (this._switch) this.next(fr, fe);
+			else this.next(fe, fr);
 	},
-	increase: function(fr, fe){
+	next: function(fr, fe){
 		var opacity = 0;
 		opacity = fr.domStyles.opacity + this.variable;
+		
+		
 		
 		opacity = roundNumber(opacity, 4);
 		if (opacity >= 1){
@@ -122,26 +123,13 @@ enyo.kind({
 		
 		//this.log("increasing...", opacity);
 	},
-	decrease: function(fe, fr){ // swapped the arguments. GENIUS.
-		var opacity = 0;
-		opacity = fe.domStyles.opacity - this.variable;
-		
-		opacity = roundNumber(opacity, 4);
-		if (opacity <= 0){
-			this.rotateFlag = true;
-		}
-		
-		fe.applyStyle("opacity", opacity);
-		fr.applyStyle("opacity", 1 - opacity);
-		
-		//this.log("decreasing...", opacity);
-	},
 	imageSetup: function(image){
 		image.applyStyle("width", this.size + "px");
 		image.applyStyle("height", this.size + "px");
 		image.applyStyle("right", (window.innerWidth - this.size) / 2 + "px");
 		image.applyStyle("bottom", (window.innerHeight - this.size) / 2 + "px");
 		image.applyStyle("position", "fixed");
+		//image.applyStyle("opacity", -this.variable);
 		image.setSrc(this.rootPath + this.covers[image.cover] + ".png");
 	},
 	show: function(){
