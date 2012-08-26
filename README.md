@@ -3,6 +3,12 @@ fx.Fader
 
 Enyo 2.0 kind for fader screensaver type thingy.
 
+Looks REALLY cool in card view!
+
+You can use it for anything, works great for slideshows (I would think).
+
+Easy to set up, customizable.
+
 /*
 *
 *
